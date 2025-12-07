@@ -22,7 +22,7 @@ def signup():
     return "<p>signup</p>"
 
 
-@app.route("/logor_password")
+@app.route("/logout_password")
 def forgot_password():
     return "<p>forgot password</p>"
 
