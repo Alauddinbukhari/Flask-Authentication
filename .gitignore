@@ -32,3 +32,5 @@ instance/
 # Add any other specific files or folders your Flask app generates that should be ignored
 # e.g., database files if not managed by migrations and meant to be local
 # *.db
+
+.env

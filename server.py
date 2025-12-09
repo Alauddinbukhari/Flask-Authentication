@@ -1,6 +1,9 @@
 from flask import Flask,request, render_template, redirect, url_for, session, flash
+from config import Config
+
 
 app= Flask(__name__)
+app.config.from_object(Config)
 
 
 
