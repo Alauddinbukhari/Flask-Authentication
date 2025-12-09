@@ -19,7 +19,7 @@ def login():
 
     login_form=MyForm()
     if login_form.validate_on_submit():
-        pass
+        print(login_form.data.email)
     return render_template("login.html",form =login_form)
 
 
