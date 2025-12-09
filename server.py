@@ -1,5 +1,6 @@
 from flask import Flask,request, render_template, redirect, url_for, session, flash
 from config import Config
+from forms.login_form import MyForm
 
 
 app= Flask(__name__)
@@ -15,9 +16,11 @@ def home():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    if request.method == "POST":
+
+    login_form=MyForm()
+    if login_form.validate_on_submit():
         pass
-    return render_template("login.html")
+    return render_template("login.html",form =login_form)
 
 
 @app.route("/signup")
