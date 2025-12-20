@@ -3,6 +3,7 @@ from config import Config
 from forms.login_form import MyForm
 
 
+
 app= Flask(__name__)
 app.config.from_object(Config)
 
@@ -25,7 +26,7 @@ def login():
 
 @app.route("/signup")
 def signup():
-    return "<p>signup</p>"
+    return render_template("sign_up.html")
 
 
 @app.route("/logout_password")

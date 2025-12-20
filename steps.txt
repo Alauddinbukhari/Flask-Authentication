@@ -1,0 +1,9 @@
+// when user login save user details using bcrypt
+// when user login start a session
+//different betweeen session and token based authenticatio
+//implement oautho for authentication
+//restrict user without login to access certian routes
+//add forgot password functionality
+//when user login then his informatin should be visible
+
+
