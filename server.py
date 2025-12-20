@@ -1,13 +1,21 @@
 from flask import Flask,request, render_template, redirect, url_for, session, flash
 from config import Config
 from forms.login_form import MyForm
-
+from forms.sign_up_form import Signup
+from models.user import db
+from models.user import User
 
 
 app= Flask(__name__)
 app.config.from_object(Config)
 
+# configure the SQLite database, relative to the app instance folder
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+# initialize the app with the extension
+db.init_app(app)
 
+with app.app_context():
+    db.create_all()
 
 @app.route("/")
 def home():
@@ -26,7 +34,8 @@ def login():
 
 @app.route("/signup")
 def signup():
-    return render_template("sign_up.html")
+    sign_up_form = Signup()
+    return render_template("sign_up.html",form = sign_up_form)
 
 
 @app.route("/logout_password")

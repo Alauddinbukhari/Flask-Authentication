@@ -1,3 +1,9 @@
+// attach database to store user details
+// try to use sqlite or mongodb
+//onces done, try to login using database stored user details
+
+
+
 // when user login save user details using bcrypt
 // when user login start a session
 //different betweeen session and token based authenticatio
