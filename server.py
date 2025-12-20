@@ -28,7 +28,9 @@ def login():
 
     login_form=MyForm()
     if login_form.validate_on_submit():
-        print(login_form.data.email)
+        print(login_form.email.data)
+        print(login_form.password.data)
+        return redirect(url_for('home'))
     return render_template("login.html",form =login_form)
 
 
