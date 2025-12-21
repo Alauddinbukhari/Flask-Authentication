@@ -28,15 +28,34 @@ def login():
 
     login_form=MyForm()
     if login_form.validate_on_submit():
-        print(login_form.email.data)
-        print(login_form.password.data)
-        return redirect(url_for('home'))
+       
+        email=login_form.email.data
+        password=login_form.password.data
+
+        user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one()
+        if user and user.password == password:
+            flash('Login successful!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid email or password.', 'danger')
+
     return render_template("login.html",form =login_form)
 
 
-@app.route("/signup")
+@app.route("/signup",methods=['GET', 'POST'])
 def signup():
     sign_up_form = Signup()
+    
+    print("METHOD:", request.method)
+    print("FORM ERRORS:", sign_up_form.errors)
+    print("IS SUBMITTED:", sign_up_form.is_submitted())
+    print("VALIDATE:", sign_up_form.validate())
+
+    if sign_up_form.validate_on_submit():
+       print(sign_up_form.first_name.data)
+       print(2)
+       redirect(url_for("login"))
+
     return render_template("sign_up.html",form = sign_up_form)
 
 
