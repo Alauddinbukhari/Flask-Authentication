@@ -50,6 +50,7 @@ def signup():
     print("FORM ERRORS:", sign_up_form.errors)
     print("IS SUBMITTED:", sign_up_form.is_submitted())
     print("VALIDATE:", sign_up_form.validate())
+    
 
     if sign_up_form.validate_on_submit():
        print(sign_up_form.first_name.data)
