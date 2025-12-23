@@ -1,5 +1,5 @@
-// attach database to store user details
-// try to use sqlite or mongodb
+// attach database to store user details - done
+// try to use sqlite or mongodb - done
 //onces done, try to login using database stored user details
 
 
