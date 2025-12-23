@@ -6,6 +6,9 @@ from models.user import db
 from models.user import User
 from flask_bcrypt import Bcrypt
 from functools import wraps
+from authlib.integrations.flask_client import OAuth
+import os
+
 
 def login_required(f):
     wraps(f)
@@ -21,6 +24,10 @@ def login_required(f):
 app= Flask(__name__)
 app.config.from_object(Config)
 
+
+
+oauth= OAuth(app)
+
 bcrypt= Bcrypt(app)
 
 # configure the SQLite database, relative to the app instance folder
@@ -30,6 +37,9 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+
+
+google = oauth.register( name="google", client_id=os.getenv("GOOGLE_CLIENT_ID"), client_secret=os.getenv("GOOGLE_CLIENT_SECRET"), server_metadata_url="https://accounts.google.com/.well-known/openid-configuration", client_kwargs={ "scope": "openid email profile" })
 
 @app.route("/")
 def home():
@@ -99,6 +109,40 @@ def secure():
 @app.route("/forgot_password")
 def forgot_password():
     return "<p>forgot password</p>"
+
+
+
+@app.route("/login/google")
+def login_google():
+    redirect_uri = url_for("auth_callback", _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+
+
+@app.route("/auth/callback")
+def auth_callback():
+    token = google.authorize_access_token()
+    user_info = google.get("userinfo").json()
+
+  
+    user = User.query.filter_by(email=user_info["email"]).first()
+
+    if not user:
+        user = User(
+            username=user_info["name"],
+            email=user_info["email"],
+            password=None  # OAuth users don't need password
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    session["user_id"] = user.id
+    session["username"] = user.username
+
+    return redirect(url_for("dashboard"))
+
+
 
 
 if __name__=="__main__":
