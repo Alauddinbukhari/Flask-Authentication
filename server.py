@@ -5,6 +5,18 @@ from forms.sign_up_form import Signup
 from models.user import db
 from models.user import User
 from flask_bcrypt import Bcrypt
+from functools import wraps
+
+def login_required(f):
+    wraps(f)
+    def wrapper_function(*args,**kwargs):
+        if 'user_id'not in session:
+            flash('you need to login first danger')
+            
+            return redirect(url_for('login'))
+        return f(*args,**kwargs)
+    return wrapper_function
+
 
 app= Flask(__name__)
 app.config.from_object(Config)
@@ -35,7 +47,10 @@ def login():
         password=login_form.password.data
 
         user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one()
-        if user and user.password == password:
+        if user and bcrypt.check_password_hash(user.password, password):
+            session['user_id']= user.id
+            session['username']= user.username
+           
             flash('Login successful!', 'success')
             return redirect(url_for('home'))
         else:
@@ -55,11 +70,12 @@ def signup():
         last_name = sign_up_form.last_name.data
         email = sign_up_form.email.data
         password = sign_up_form.password.data
+        hashed= bcrypt.generate_password_hash(password=password)
 
         new_user = User(
             username=f"{first_name} {last_name}",
             email=email,
-            password=password
+            password=hashed
         )
         db.session.add(new_user)
         db.session.commit()
@@ -72,7 +88,10 @@ def signup():
     return render_template("sign_up.html",form = sign_up_form)
 
 
-
+@app.route("/secure")
+@login_required
+def secure():
+    return "<p>secure page</p>"
 
 
 
