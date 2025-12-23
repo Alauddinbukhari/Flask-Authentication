@@ -4,10 +4,12 @@ from forms.login_form import MyForm
 from forms.sign_up_form import Signup
 from models.user import db
 from models.user import User
-
+from flask_bcrypt import Bcrypt
 
 app= Flask(__name__)
 app.config.from_object(Config)
+
+bcrypt= Bcrypt(app)
 
 # configure the SQLite database, relative to the app instance folder
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
