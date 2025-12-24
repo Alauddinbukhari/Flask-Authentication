@@ -1,0 +1,86 @@
+
+
+---
+
+# 📘 Authentication & API Notes
+
+## 1. **Flask + SQLAlchemy (Sessions)**
+- Store user info in DB (`User` model with id, email, password).
+- On login, set `session["user_id"]`.
+- Server remembers who you are using cookies + session storage.
+- **Best for:** Traditional Flask web apps with Jinja templates.
+- **Scaling:** Needs sticky sessions or shared store (Redis, DB) if multiple servers.
+
+---
+
+## 2. **Google OAuth**
+- User logs in via Google → redirected back to `/auth/callback`.
+- You fetch profile from Google (`userinfo` endpoint).
+- If user exists in DB → log them in; else create new record.
+- Still can use `session["user_id"]` or issue JWT.
+- **Redirect URI** must match exactly in Google Cloud Console.
+- **Scopes:** `openid email profile` → gives ID, email, name, picture.
+
+---
+
+## 3. **JWT (JSON Web Token)**
+- Stateless token with 3 parts: `header.payload.signature`.
+- Payload carries claims (user id, email, expiration).
+- Client stores JWT and sends it in `Authorization: Bearer <token>`.
+- Server verifies signature with secret/public key → trusts payload.
+- **Best for:** APIs, SPAs (React, Vue, Angular), mobile apps.
+- **Advantages:** Stateless, scalable, portable, supports roles/permissions.
+- **Limitations:** Must handle expiration/refresh; secure storage needed.
+
+---
+
+## 4. **Sessions vs JWT**
+| Feature            | Sessions (Flask)                  | JWT (Stateless) |
+|--------------------|-----------------------------------|-----------------|
+| Storage            | Server-side (session store)       | Client-side (token itself) |
+| Best for           | Classic web apps                  | APIs, SPAs, mobile apps |
+| Scalability        | Needs shared store (Redis/DB)     | Easy, stateless |
+| Identity           | Stored in server memory           | Encoded in token payload |
+| Expiration         | Managed by server                 | Built into token (`exp`) |
+| Security           | Cookie-based                      | Signed token |
+
+---
+
+## 5. **APIs**
+- **Open APIs:** Free, no login. Just type URL → get JSON.  
+  Examples: JSONPlaceholder, Dog API, Cat Facts.
+- **Locked APIs:** Require registration + API key.  
+  - API key = static string, identifies your app.  
+  - Sent via query param or header.  
+  - Example: OpenWeatherMap (`?appid=YOUR_API_KEY`).
+- **JWT vs API Key:**  
+  - API key = password for your app.  
+  - JWT = signed token with identity + expiration, often used in OAuth.
+
+---
+
+## 6. **How Server Verifies JWT**
+- Decode token → check signature with secret/public key.  
+- Validate claims (`exp`, `iss`, `aud`).  
+- Extract identity (`sub`, `email`).  
+- No need to store session — token itself proves identity.  
+- Analogy: JWT = signed passport; server trusts the stamp, not memory.
+
+---
+
+e
+- **Sessions:** Best for classic Flask web apps.  
+- **Google OAuth:** Lets users log in with Google, can combine with sessions or JWT.  
+- **JWT:** Best for APIs, SPAs, mobile apps — stateless and scalable.  
+- **API Keys:** Identify your app to external services; simpler but less flexible than JWT.  
+- **JWT in platforms:** Many modern APIs issue JWTs instead of API keys (via OAuth).  
+
+---
+
+Sessions = server remembers you.  
+JWT = token carries your identity.  
+API keys = password for your app.  
+
+---
+
+Would you like me to also create a **visual text flow diagram** (login → token/session → request → verification) so you can quickly recall the difference between sessions and JWT at a glance?
