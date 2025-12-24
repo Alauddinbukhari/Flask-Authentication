@@ -253,10 +253,3 @@ GitHub: [Alauddinbukhari](https://github.com/Alauddinbukhari)
 - Any tutorials or repositories you used as inspiration — list them here
 
 ---
-
-If you’d like, I can:
-- Tailor this README to exactly match the code (I can inspect files and update example commands and endpoints).
-- Add badges (CI, PyPI, license) — tell me which services you use.
-- Create a LICENSE file or Dockerfile if you want me to draft one.
-
-Tell me which next step you want. 
