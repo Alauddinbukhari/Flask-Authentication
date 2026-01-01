@@ -68,7 +68,7 @@
 
 ---
 
-e
+
 - **Sessions:** Best for classic Flask web apps.  
 - **Google OAuth:** Lets users log in with Google, can combine with sessions or JWT.  
 - **JWT:** Best for APIs, SPAs, mobile apps — stateless and scalable.  

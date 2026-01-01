@@ -1,16 +1,4 @@
-// attach database to store user details - done
-// try to use sqlite or mongodb - done
-//onces done, try to login using database stored user details
-
-
-
-// when user login save user details using bcrypt
-// when user login start a session
-//different betweeen session and token based authenticatio
-//implement oautho for authentication
-//restrict user without login to access certian routes
-//add forgot password functionality
-//when user login then his informatin should be visible
-//MIX CHARACTERS IN PASSWORD VALIDATION
+//Current- Fix Oauth
+//Create a Seperate file for JWT implementation.
 
 
