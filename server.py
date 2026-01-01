@@ -1,4 +1,4 @@
-from flask import Flask,request, render_template, redirect, url_for, session, flash
+from flask import Flask, request, render_template, redirect, url_for, session, flash
 from config import Config
 from forms.login_form import MyForm
 from forms.sign_up_form import Signup
@@ -127,7 +127,7 @@ def login_google():
 @app.route("/auth/callback")
 def auth_callback():
     token = oauth.google.authorize_access_token() # 2. Fetch user info using discovery metadata user_info = oauth.google.get("userinfo").json()
-
+    user_info = oauth.google.parse_id_token(token)
   
     user = User.query.filter_by(email=user_info["email"]).first()
 
