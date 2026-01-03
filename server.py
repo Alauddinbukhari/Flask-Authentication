@@ -8,6 +8,7 @@ from flask_bcrypt import Bcrypt
 from functools import wraps
 from authlib.integrations.flask_client import OAuth
 import os
+import secrets
 
 
 def login_required(f):
@@ -48,7 +49,7 @@ google = oauth.register( name="google",
 @app.route("/")
 def home():
     
-    return render_template("index.html")
+    return render_template("index.html", username=session.get('username'))
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -93,6 +94,7 @@ def signup():
         )
         db.session.add(new_user)
         db.session.commit()
+        
 
         flash('Account created successfully!', 'success')
         return redirect(url_for('login'))
@@ -118,8 +120,10 @@ def forgot_password():
 
 @app.route("/login/google")
 def login_google():
+    nonce = secrets.token_urlsafe(16) 
+    session["nonce"] = nonce
     redirect_uri = url_for("auth_callback", _external=True)
-    return google.authorize_redirect(redirect_uri)
+    return google.authorize_redirect(redirect_uri, nonce=nonce)
 
 
 
@@ -127,7 +131,7 @@ def login_google():
 @app.route("/auth/callback")
 def auth_callback():
     token = oauth.google.authorize_access_token() # 2. Fetch user info using discovery metadata user_info = oauth.google.get("userinfo").json()
-    user_info = oauth.google.parse_id_token(token)
+    user_info = oauth.google.parse_id_token(token, nonce=session["nonce"])
   
     user = User.query.filter_by(email=user_info["email"]).first()
 
