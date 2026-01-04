@@ -1,0 +1,1 @@
+'''Based on my analysis, the blog project which uses classic server rendering with Flask and SQLAlchemy can be adapted to use JWT for authentication.But the session option is valid for this project.'''
